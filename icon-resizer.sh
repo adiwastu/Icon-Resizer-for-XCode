@@ -16,16 +16,19 @@ if [ "$extension" != "png" ]; then
     exit 1
 fi
 
+# Create output folder
+mkdir "${filename%.*}"
+
 # Get input file size
 size=`sips -g pixelWidth -g pixelHeight "$1" | awk 'NR%2{printf $NF " ";next;}1'`
 
-# Generate resized PNG files
-sips -Z 16 "$1" --out "${filename%.*}_16x16.png"
-sips -Z 32 "$1" --out "${filename%.*}_32x32.png"
-sips -Z 64 "$1" --out "${filename%.*}_64x64.png"
-sips -Z 128 "$1" --out "${filename%.*}_128x128.png"
-sips -Z 256 "$1" --out "${filename%.*}_256x256.png"
-sips -Z 512 "$1" --out "${filename%.*}_512x512.png"
+# Generate resized PNG files and put them in output folder
+sips -Z 16 "$1" --out "${filename%.*}/${filename%.*}_16x16.png"
+sips -Z 32 "$1" --out "${filename%.*}/${filename%.*}_32x32.png"
+sips -Z 64 "$1" --out "${filename%.*}/${filename%.*}_64x64.png"
+sips -Z 128 "$1" --out "${filename%.*}/${filename%.*}_128x128.png"
+sips -Z 256 "$1" --out "${filename%.*}/${filename%.*}_256x256.png"
+sips -Z 512 "$1" --out "${filename%.*}/${filename%.*}_512x512.png"
 
-echo "Resized PNG files generated:"
-ls "${filename%.*}"_*.png
+echo "Resized PNG files generated in ${filename%.*}/:"
+ls "${filename%.*}"/*.png
